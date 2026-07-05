@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan Car Price Predictor</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f2f4f8;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            padding:20px;
+        }
+
+        .container{
+            width:500px;
+            background:#fff;
+            padding:25px;
+            border-radius:10px;
+            box-shadow:0 4px 15px rgba(0,0,0,.12);
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+            color:#222;
+            font-size:26px;
+        }
+
+        .form-group{
+            margin-bottom:15px;
+        }
+
+        label{
+            display:block;
+            margin-bottom:5px;
+            font-size:14px;
+            font-weight:bold;
+            color:#444;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:10px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            font-size:14px;
+        }
+
+        input[type="range"]{
+            padding:0;
+        }
+
+        .options{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:8px;
+            margin-top:8px;
+        }
+
+        .options label{
+            display:flex;
+            align-items:center;
+            gap:6px;
+            font-weight:normal;
+            font-size:14px;
+        }
+
+        .options input{
+            width:auto;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:15px;
+            background:#007BFF;
+            color:white;
+            border:none;
+            border-radius:5px;
+            font-size:15px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        .prediction{
+            margin-top:20px;
+            padding:15px;
+            border-radius:8px;
+            background:#e8f5e9;
+            border:1px solid #4caf50;
+            text-align:center;
+        }
+
+        .prediction h2{
+            color:#2e7d32;
+            margin-bottom:8px;
+            font-size:18px;
+        }
+
+        .prediction h1{
+            color:#1b5e20;
+            font-size:30px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Japan Car Price Predictor</h1>
+    <form action="/predict" method="POST">
+        <div class="form-group">
+            <label>Car Model</label>
+            <input list="car_models" name="name" placeholder="Enter..." required>
+            <datalist id="car_models">
+                {% for car in car_models %}
+                    <option value="{{ car }}">
+                {% endfor %}
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label>Chassis Code</label>
+            <input list="chassis_codes" name="chassis_code" placeholder="Enter...">
+            <datalist id="chassis_codes">
+                {% for code in chassis_codes %}
+                    <option value="{{ code }}">
+                {% endfor %}
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label>Year</label>
+            <input type="number"
+                   name="year"
+                   max="2026"
+                   min="1995"
+                   required>
+        </div>
+        <div class="form-group">
+            <label>Mileage (KM)</label>
+            <input
+                type="number"
+                id="mileage_km"
+                name="mileage_km"
+                min="0"
+                max="300000"
+                step="1000"
+                required>
+        </div>
+        <div class="form-group">
+            <label>Engine Capacity</label>
+            <select name="engine_cc" required>
+                <option value="">Select Engine Size</option>
+                <option value="660">660 cc</option>
+                <option value="1000">1000 cc</option>
+                <option value="1200">1200 cc</option>
+                <option value="1300">1300 cc</option>
+                <option value="1500">1500 cc</option>
+                <option value="1800">1800 cc</option>
+                <option value="2000">2000 cc</option>
+                <option value="2400">2400 cc</option>
+                <option value="2500">2500 cc</option>
+                <option value="3000">3000 cc</option>
+                <option value="3500">3500 cc</option>
+                <option value="4000">4000 cc</option></select>
+        </div>
+        <div class="form-group">
+            <label>Fuel Type</label>
+            <select name="fuel" required>
+                <option value="">Select Fuel Type</option>
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Electric">Electric</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Transmission</label>
+            <select name="transmission" required>
+                <option value="">Select Transmission</option>
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option></select>
+        </div>
+        <div class="form-group">
+            <label>Vehicle Type</label>
+            <select name="vehicle_type">
+                <option value="">Select Vehicle Type</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Van">Van</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Wagon">Wagon</option></select>
+        </div>
+        <div class="form-group">
+            <label>Vehicle Features</label>
+            <div class="options">
+                <label><input type="checkbox" name="has_sunroof">Sunroof</label>
+                <label><input type="checkbox" name="has_leather">Leather Seats</label>
+                <label><input type="checkbox" name="has_navigation">Navigation</label>
+                <label><input type="checkbox" name="has_alloy_wheels">Alloy Wheels</label>
+                <label><input type="checkbox" name="has_4wd">4WD</label>
+                <label><input type="checkbox" name="has_airbag">Airbags</label>
+                <label><input type="checkbox" name="has_abs">ABS</label>
+                <label><input type="checkbox" name="has_camera">Reverse Camera</label>
+            </div>
+        </div>
+        <button type="submit">Predict Price</button>
+    </form>
+    {% if price_usd %}
+    <div class="prediction">
+        <h2>Estimated Price</h2>
+        <h1>{{ price_usd }}</h1>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>

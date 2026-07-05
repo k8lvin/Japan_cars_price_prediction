@@ -1,4 +1,4 @@
-# Import Car Price Prediction
+# Import Cars Price Prediction
 
 This project uses data scrapped from SBT japan to build a machine learning model capable of predicting the market prices of used Japanese vehicles based on their specifications.The application is built with **Python**, **Flask**, **Scikit-learn**, and **XGBoost**, and provides predictions through a simple web interface.
 

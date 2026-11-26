@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template 
-from preprocess import load_data, clean_data
+from src.preprocess import load_data, clean_data
 from pathlib import Path
 import pandas as pd
 import numpy as np

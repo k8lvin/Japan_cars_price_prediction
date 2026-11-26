@@ -7,7 +7,10 @@ import joblib
 
 app = Flask(__name__, template_folder="templates")
 
-MODEL_PATH = 'models/price_pipeline.pkl'
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+#MODEL_PATH = 'models/price_pipeline.pkl'
+MODEL_PATH = BASE_DIR / "models" / "price_pipeline.pkl"
 
 pipeline = joblib.load(MODEL_PATH)
 

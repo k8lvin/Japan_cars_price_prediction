@@ -54,3 +54,4 @@ urllib3==2.7.0
 wcwidth==0.7.0
 gunicorn
 Flask
+xgboost

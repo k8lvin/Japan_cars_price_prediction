@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
 MODEL_PATH = 'models/price_pipeline.pkl'
 
